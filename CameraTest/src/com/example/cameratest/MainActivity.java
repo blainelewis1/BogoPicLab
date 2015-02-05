@@ -4,7 +4,6 @@ import java.io.File;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -45,6 +44,7 @@ public class MainActivity extends Activity {
 		// TODO: Create an intent with the action
 		// MediaStore.ACTION_IMAGE_CAPTURE
 		
+
 		// ComponentName cn = new ComponentName("es.softwareprocess.bogopicgen",
 		// "es.softwareprocess.bogopicgen.BogoPicGenActivity");
 		// ComponentName cn = new ComponentName("com.android.camera",
@@ -66,13 +66,37 @@ public class MainActivity extends Activity {
 		imageFileUri = Uri.fromFile(imageFile);
 
 		// TODO: Put in the intent in the tag MediaStore.EXTRA_OUTPUT the URI
+
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
 		
 		// TODO: Start the activity (expecting a result), with the code
 		// CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE
+		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 		
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		
+		if(requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {				
+			TextView statusTextView = (TextView) findViewById(R.id.status);
+
+			if(resultCode == RESULT_OK) {
+				statusTextView.setText("Photo OK!");
+				ImageButton photoButton = (ImageButton) findViewById(R.id.TakeAPhoto);
+				
+				photoButton.setImageURI(imageFileUri);
+				
+			} else if(resultCode == RESULT_CANCELED) {
+				statusTextView.setText("Photo cancelled");
+			} else {
+				statusTextView.setText("Unknown Error...");
+			}
+			
+			
+		}
+		
 		// TODO: Handle the results from CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE
 		
 		// TODO: Handle the cases for RESULT_OK, RESULT_CANCELLED, and others
